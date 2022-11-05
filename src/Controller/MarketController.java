@@ -13,6 +13,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import main.Main;
+import main.MyListener;
 import model.Fruit;
 
 import java.io.IOException;
@@ -41,8 +42,8 @@ public class MarketController implements Initializable {
     private ScrollPane scroll;
 
     private Image image;
-
     private List<Fruit> fruits = new ArrayList<>();
+    private MyListener myListener;
 
     private List<Fruit> getData() {
         List<Fruit> fruits = new ArrayList<>();
@@ -122,6 +123,12 @@ public class MarketController implements Initializable {
         fruits.addAll(getData());
         if (fruits.size() > 0) {
             setChosenfruit(fruits.get(0));
+            myListener = new MyListener() {
+                @Override
+                public void onClickListener(Fruit fruit) {
+                    setChosenfruit(fruit);
+                }
+            };
         }
         int column = 0;
         int row = 1;
@@ -133,7 +140,7 @@ public class MarketController implements Initializable {
                 AnchorPane anchorPane = fxmlLoader.load();
 
                 ItemController itemController = fxmlLoader.getController();
-                itemController.setData(fruits.get(i));
+                itemController.setData(fruits.get(i), myListener);
 
                 if (column == 3) {
                     column = 0;
